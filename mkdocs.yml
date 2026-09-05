@@ -1,6 +1,6 @@
 site_name: AIOS Documentation
 site_url: https://cli.rexai.top
-site_description: "A local-first Graph Engine for coding agents — composes project memory, adaptive routing, multi-agent teams, and verification into a verifiable graph on top of Claude Code, Codex, Gemini CLI, OpenCode, Hermes, and Grok."
+site_description: "AIOS is a local-first orchestration control plane for coding agents: project memory (ContextDB), adaptive workflow routing, multi-agent teams, resumable long-running tasks, and verifiable evidence on top of Codex, Claude Code, Gemini CLI, OpenCode, Hermes, and Grok."
 site_author: RexAI
 repo_url: https://github.com/rexleimo/aios
 repo_name: rexleimo/aios
@@ -71,13 +71,13 @@ plugins:
           build: true
           link: /
           site_name: AIOS Documentation
-          site_description: "A local-first Graph Engine for coding agents — composes project memory, adaptive routing, multi-agent teams, and verification into a verifiable graph on top of Claude Code, Codex, Gemini CLI, OpenCode, Hermes, and Grok."
+          site_description: "AIOS is a local-first orchestration control plane for coding agents: project memory (ContextDB), adaptive workflow routing, multi-agent teams, resumable long-running tasks, and verifiable evidence on top of Codex, Claude Code, Gemini CLI, OpenCode, Hermes, and Grok."
         - locale: zh
           name: 简体中文
           build: true
           link: /zh/
           site_name: AIOS 文档
-          site_description: "面向 Claude Code / Codex / Gemini / OpenCode / Grok 的本地优先 Graph Engine：把项目记忆、自适应路由、多 Agent 协作与验证编排成可验证的 Agent 图。"
+          site_description: "面向 Codex / Claude Code / Gemini CLI / OpenCode / Hermes / Grok 的本地优先编排控制平面：项目记忆（ContextDB）、自适应工作流路由、多 Agent 协作、可恢复长任务与可验证证据。"
           nav_translations:
             Home: 首页
             Blog: 博客
@@ -124,7 +124,7 @@ plugins:
           build: true
           link: /ja/
           site_name: AIOS ドキュメント
-          site_description: "Codex/Claude/Gemini/OpenCode/Grok Build 向けのローカルファースト Graph Engine。プロジェクト記憶、ルーティング、マルチエージェント、検証を Verifiable Graph に統合。"
+          site_description: "Codex/Claude/Gemini/OpenCode/Hermes/Grok Build 向けのローカルファースト・オーケストレーション制御プレーン。プロジェクト記憶（ContextDB）、適応的ワークフロールーティング、マルチエージェント、再開可能な長時間タスク、検証可能なエビデンスを提供。"
           nav_translations:
             Home: ホーム
             Blog: ブログ
@@ -171,7 +171,7 @@ plugins:
           build: true
           link: /ko/
           site_name: AIOS 문서
-          site_description: "Codex/Claude/Gemini/OpenCode/Grok Build용 로컬 우선 Graph Engine. 프로젝트 기억, 라우팅, 멀티에이전트, 검증을 검증 가능한 에이전트 그래프로 통합."
+          site_description: "Codex/Claude/Gemini/OpenCode/Hermes/Grok Build용 로컬 우선 오케스트레이션 컨트롤 플레인. 프로젝트 기억(ContextDB), 적응형 워크플로 라우팅, 멀티에이전트, 재개 가능한 장기 작업, 검증 가능한 증거를 제공."
           nav_translations:
             Home: 홈
             Blog: 블로그

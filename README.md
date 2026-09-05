@@ -103,7 +103,7 @@ aios team 3:codex "Review the auth module and update its tests"
 aios harness run --objective "Finish the release handoff" --worktree
 
 # Preview adaptive routing without creating a live plan
-node scripts/aios.mjs plan auto-gate --task "Refactor the auth module" --dry-run --json
+aios plan auto-gate --task "Refactor the auth module" --dry-run --json
 ```
 
 The project marker points clients at `.aios/context-db/index.json`. ContextDB is **pull-based**: agents search or recall relevant material instead of receiving the whole history on every prompt.

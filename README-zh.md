@@ -103,7 +103,7 @@ aios team 3:codex "审查 auth 模块并更新测试"
 aios harness run --objective "完成发布交接" --worktree
 
 # 预览自适应策略，不创建真实计划
-node scripts/aios.mjs plan auto-gate --task "重构 auth 模块" --dry-run --json
+aios plan auto-gate --task "重构 auth 模块" --dry-run --json
 ```
 
 项目标记会把客户端指向 `.aios/context-db/index.json`。ContextDB 是**按需读取**：Agent 搜索/召回相关资料，而不是每次提示塞完整历史。
