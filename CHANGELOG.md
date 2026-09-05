@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
+## [5.10.0] - 2026-09-06
+
+### Added
+
+- ci: gitleaks secret-scan job on ci-main, and `npm audit --omit=dev --audit-level=critical` gates for root and mcp-server runtime dependencies (current baseline: 0 critical).
+- docs: prompt authoring norms (`docs/prompt-authoring-norms.md`, mirrored as `rex-harness/skill-sources/PROMPT-AUTHORING.md`, summarized in AGENTS.md) — contract-first skills, model self-reporting for semantic judgments (ReAct-style), hard gates as verification protocols; keyword/regex intent guessing is banned in prompts and helper scripts.
+- release: `scripts/release-preflight.sh` now refuses to pass while `docs/evidence/skill-training/` has uncommitted changes (v5.9.0 white-run guard: evidence must live in the tagged commit) and prints the exact annotated-tag command.
+
+### Changed
+
+- ci: every GitHub Action is pinned to a full commit SHA (checkout, setup-node, upload-artifact, cache restore/save, pages suite, github-script, CodeQL); the release workflow runs the changed-Skill training evidence gate before the full test matrix (fail fast); `windows-shell-smoke` installs with `npm ci` for reproducible runs.
+- docs: AGENTS.md now leads with the AIOS orchestration control plane identity (browser MCP marked as a legacy component, not the project's center); mkdocs site descriptions (en/zh/ja/ko) drop the stale "Graph Engine" narrative; README quick-tour unified on the installed `aios` CLI.
+- gitignore: `docs/evidence/skill-training` certification output (the 7 canonical filenames per run) is whitelisted for plain `git add` — no more `git add -f`; `pptx-ai-coding-share/node_modules/` and `.cache/` are ignored; the stale root `opencode.json` ignore rule is removed (the file is a tested native-sync projection and stays tracked).
+
+### Fixed
+
+- Windows regression suite is fully green: the orchestrator agent export and codemap instruction drift guards compare line-ending-normalized content, and `.gitattributes` pins `agent-sources/**`, `scripts/lib/specs/*.json`, and the root instruction files to LF. The two chronic Windows-only failures were checkout CRLF artifacts, not drift, and running the tests no longer dirties `scripts/lib/specs/orchestrator-agents.json`.
+- repo: 351 vendored `pptx-ai-coding-share/node_modules` files and 110 tracked `.cache/` mkdocs font files removed from git (regenerable, now ignored); four stray root debug logs deleted.
+
 ## [5.9.0] - 2026-09-02
 
 ### Added

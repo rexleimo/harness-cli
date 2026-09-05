@@ -4,9 +4,28 @@
 
 格式基于 Keep a Changelog，遵循语义化版本规范。
 
-> 当前主线版本：**v5.9.0（2026-09-02）**。完整的多语言当前日志请查看 [`docs-site/zh/changelog.md`](../../docs-site/zh/changelog.md)。
+> 当前主线版本：**v5.10.0（2026-09-06）**。完整的多语言当前日志请查看 [`docs-site/zh/changelog.md`](../../docs-site/zh/changelog.md)。
 >
-> v5.9.0 重点包含：记忆系统跨客户端激活（会话启动自动注册 ContextDB、aios-memory MCP 三工具、OpenCode 插件、五端 Memory Trigger Contract 投影）、Codex hooks 信任持久化根因修复（安装器自动写入，启动弹窗不再复发）、Gemini 恢复全量支持、五大 MCP × 七客户端全绿。`aios session start --json` 输出形状变更为 `{ registration, lines }`。
+> v5.10.0 重点包含：Windows 回归套件全绿（两个固有红测实为 CRLF 伪影，drift guard 归一化 + `.gitattributes` 钉 LF）、发布证据门时序修复与 preflight"证据必须已提交"守卫、供应链加固（Actions 全量 SHA 钉死、gitleaks、npm audit critical 门、windows 冒烟 npm ci）、仓库减负（461 个可再生成文件出库）、叙事对齐（AGENTS/mkdocs/README）与提示词撰写规范落地（主仓 + rex-harness）。
+
+## [5.10.0] - 2026-09-06
+
+### 新增
+
+- **CI 密钥扫描与依赖审计门**：ci-main 新增 gitleaks job；根目录与 mcp-server 新增 `npm audit --omit=dev --audit-level=critical`（当前基线 0 critical）。
+- **提示词撰写规范**：`docs/prompt-authoring-norms.md` + `rex-harness/skill-sources/PROMPT-AUTHORING.md` + AGENTS.md 精简条款——契约优先、语义判断模型自报告（ReAct 式）、硬门槛即验证协议；禁止在提示词/脚本中用关键词或正则猜测意图。
+- **发布白跑守卫**：`release-preflight.sh` 在训练证据存在未提交变更时拒绝通过，并输出 annotated tag 的确切命令。
+
+### 变更
+
+- **CI**：全部 GitHub Actions 钉到完整 commit SHA；release 工作流将 Skill 训练证据门前移到全量测试之前（快速失败）；`windows-shell-smoke` 改用 `npm ci`。
+- **文档叙事**：AGENTS.md 以编排控制平面定位开头（浏览器 MCP 标记 legacy）；mkdocs 四语言描述弃用"Graph Engine"旧叙事；README 快速体验统一 `aios` 调用。
+- **gitignore**：`docs/evidence/skill-training` 认证产物（每轮 7 个固定文件名）白名单化，普通 `git add` 即可提交；`pptx-ai-coding-share/node_modules/` 与 `.cache/` 入 ignore；移除过时的根 `opencode.json` ignore 规则（该文件是经测试断言的 native sync 投影，保持跟踪）。
+
+### 修复
+
+- **Windows 回归全绿**：orchestrator agent 导出与 codemap 指令两个 drift guard 改为行尾归一化对比，`.gitattributes` 将 `agent-sources/**`、`scripts/lib/specs/*.json`、根指令文件钉为 LF——两个慢性 Windows 固有失败实为检出 CRLF 伪影而非漂移，跑测试不再弄脏 `scripts/lib/specs/orchestrator-agents.json`。
+- **仓库**：351 个 `pptx-ai-coding-share/node_modules` 文件与 110 个 `.cache/` 字体文件出库；删除根目录 4 个散落调试日志。
 
 ## [5.9.0] - 2026-09-02
 

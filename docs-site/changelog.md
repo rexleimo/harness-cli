@@ -7,6 +7,23 @@ description: Release history, upgrade notes, and links to detailed docs updates.
 
 Use this page to track what changed in `AIOS` and jump to release-related docs updates.
 
+## v5.10.0 (2026-09-06) — Release Trust & Repo Slimming: Windows-Green Regression, Hardened Release Gates, Supply-Chain Pins
+
+### What changed
+
+- **Windows regression suite is fully green**: the two chronic Windows-only failures (orchestrator agent export drift guard, codemap instruction drift guard) were checkout CRLF artifacts, not real drift. Drift guards now compare line-ending-normalized content, and `.gitattributes` pins `agent-sources/**`, `scripts/lib/specs/*.json`, and the root instruction files to LF — so Windows checkouts pass exactly what Linux CI passes, and running tests no longer dirties generated specs.
+- **Release evidence gate hardened** (v5.9.0 incident follow-up): the release workflow runs the changed-Skill training evidence gate *before* the full test matrix (fail fast), and `release-preflight.sh` refuses to pass while `docs/evidence/skill-training/` has uncommitted changes — certification evidence must live in the tagged commit, not just the working tree.
+- **Supply-chain hardening**: every GitHub Action pinned to a full commit SHA; new gitleaks secret-scan job on ci-main; `npm audit --omit=dev --audit-level=critical` gates for root and mcp-server (baseline: 0 critical); `windows-shell-smoke` installs with `npm ci`.
+- **Repo slimming**: 351 vendored `pptx-ai-coding-share/node_modules` files and 110 tracked `.cache/` mkdocs font files removed from git (regenerable, now ignored); four stray root debug logs deleted. Certification output is gitignore-whitelisted so `skill certify` results commit without `git add -f`.
+- **Narrative alignment**: AGENTS.md now leads with the AIOS orchestration control plane identity (browser MCP = legacy component); mkdocs site descriptions (en/zh/ja/ko) drop the stale "Graph Engine" story; README quick-tour unified on the installed `aios` CLI.
+- **Prompt authoring norms**: `docs/prompt-authoring-norms.md` (+ `rex-harness/skill-sources/PROMPT-AUTHORING.md`) codify contract-first skills, model self-reporting for semantic judgments, and verification-protocol gates — keyword/regex intent guessing is banned in prompts and helper scripts.
+
+### Upgrade notes
+
+- No breaking behavior changes — the release is CI, docs, and repo hygiene; the only runtime-adjacent change is drift-guard normalization.
+- CI now fails on critical npm advisories and secret-scan findings; run `npm audit --omit=dev` locally before tagging.
+- Windows developers: re-checkout after pulling so `.gitattributes` normalizes `agent-sources/` and the root instruction files to LF.
+
 ## v5.9.0 (2026-09-02) — Memory Activation Across All Clients: From Regex Triggers to Prompt-Driven
 
 ### What changed

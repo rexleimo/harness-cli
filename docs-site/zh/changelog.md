@@ -5,6 +5,23 @@ description: 版本历史、升级说明与文档变更入口。
 
 # 更新日志
 
+## v5.10.0（2026-09-06）——发布可信与仓库减负：回归全绿、发布门禁加固、供应链钉死
+
+### 主要变更
+
+- **Windows 回归套件全绿**：两个"习以为常"的 Windows 固有红测（orchestrator agent 导出 drift guard、codemap 指令 drift guard）实为检出 CRLF 伪影而非真漂移。drift guard 改为行尾归一化对比，`.gitattributes` 将 `agent-sources/**`、`scripts/lib/specs/*.json` 与根指令文件钉为 LF——Windows 检出与 Linux CI 过同一套守卫，跑测试不再弄脏生成的 spec 文件。
+- **发布证据门加固**（v5.9.0 白跑事故跟进）：release 工作流把"变更 Skill 训练证据"门提前到全量测试之前（快速失败）；`release-preflight.sh` 在 `docs/evidence/skill-training/` 存在未提交变更时拒绝通过——认证证据必须在被 tag 的 commit 里，而不是只在工作树。
+- **供应链加固**：全部 GitHub Actions 钉到完整 commit SHA；ci-main 新增 gitleaks 密钥扫描 job；根目录与 mcp-server 新增 `npm audit --omit=dev --audit-level=critical` 门（当前基线 0 critical）；`windows-shell-smoke` 改用 `npm ci` 保证可复现。
+- **仓库减负**：351 个 `pptx-ai-coding-share/node_modules` 文件与 110 个 `.cache/` mkdocs 字体文件出库（可再生成，已正确 ignore）；删除根目录 4 个散落调试日志。认证产物加入 gitignore 白名单，`skill certify` 结果不再需要 `git add -f`。
+- **叙事对齐**：AGENTS.md 以 AIOS 编排控制平面定位开头（浏览器 MCP 标记为 legacy 组件）；mkdocs 四语言站点描述弃用过时的"Graph Engine"叙事；README 快速体验统一使用已安装的 `aios` CLI。
+- **提示词撰写规范**：`docs/prompt-authoring-norms.md`（+ `rex-harness/skill-sources/PROMPT-AUTHORING.md`）确立契约优先、语义判断由模型自报告（ReAct 式）、硬门槛即验证协议——关键词/正则猜测意图在提示词与辅助脚本中被明令禁止。
+
+### 升级说明
+
+- 无破坏性行为变更——本版本以 CI、文档与仓库卫生为主，唯一贴近运行时的改动是 drift guard 归一化。
+- CI 现在会对 critical 级 npm 通告与密钥扫描发现直接失败；打 tag 前请先在本地跑 `npm audit --omit=dev`。
+- Windows 开发者：拉取后请重新检出文件，让 `.gitattributes` 把 `agent-sources/` 与根指令文件归一为 LF。
+
 ## v5.9.0（2026-09-02）——记忆系统跨客户端激活：从正则触发到提示词驱动
 
 ### 主要变更
