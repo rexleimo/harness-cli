@@ -103,7 +103,8 @@ memory/memo/
 
 # Client-local MCP config — per-machine paths, not to be committed
 .opencode.json
-opencode.json
+# (root opencode.json stays tracked: generic relative paths, shape asserted by
+# scripts/tests/ecc-uplift.test.mjs)
 .hermes/.aios-native-sync.json
 .crush.json
 crush.json
@@ -121,8 +122,23 @@ crush.json
 .grok/
 .agents/
 
-# Generated Skill certification/training run evidence (keep local or upload as CI artifacts; commit stable reports only)
+# Generated Skill certification/training run evidence. Release gates read
+# `docs/evidence/skill-training/<skill>-certification-*/state.json` from git,
+# so the canonical certify output (7 fixed filenames below) stays committable
+# without `git add -f`; anything else dropped into these directories stays local.
 docs/evidence/skill-training/*
+!docs/evidence/skill-training/*/
+docs/evidence/skill-training/*/*
+!docs/evidence/skill-training/*/state.json
+!docs/evidence/skill-training/*/tasks.json
+!docs/evidence/skill-training/*/baseline-skill.md
+!docs/evidence/skill-training/*/baseline.raw.json
+!docs/evidence/skill-training/*/baseline.scored.json
+!docs/evidence/skill-training/*/candidate.raw.json
+!docs/evidence/skill-training/*/candidate.scored.json
+
+# Bundled third-party install tree for the pptx sharing toolkit (rebuild with npm install)
+pptx-ai-coding-share/node_modules/
 
 # RL/实验运行产物（由测试和训练生成，不提交）
 experiments/rl-shell-v1/campaigns/
