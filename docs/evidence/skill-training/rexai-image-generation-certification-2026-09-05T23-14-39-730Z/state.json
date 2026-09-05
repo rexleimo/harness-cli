@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 2,
+  "kind": "aios.skill-training-certification.v2",
+  "skillId": "rexai-image-generation",
+  "sourcePath": "skill-sources/rexai-image-generation/SKILL.md",
+  "base": "v5.9.0",
+  "status": "accepted",
+  "nonRegression": true,
+  "acceptedSkillHash": "5b43bdba0e7dfa661f500dbbb9d09c9a160ca3aca87846c2f5026c7448a17669",
+  "baseline": {
+    "kind": "git",
+    "contentSha256": "10a1fd154b36c8f51a3ca4f43123280f82bd793ae65e4ad9cd68d362dc61bead"
+  },
+  "candidate": {
+    "contentSha256": "5b43bdba0e7dfa661f500dbbb9d09c9a160ca3aca87846c2f5026c7448a17669"
+  },
+  "metrics": {
+    "baseline": {
+      "taskCount": 3,
+      "trainTaskCount": 2,
+      "validationTaskCount": 1,
+      "trainHard": 1,
+      "validationHard": 1,
+      "overallHard": 1
+    },
+    "candidate": {
+      "taskCount": 3,
+      "trainTaskCount": 2,
+      "validationTaskCount": 1,
+      "trainHard": 1,
+      "validationHard": 1,
+      "overallHard": 1
+    }
+  },
+  "artifacts": {
+    "tasks": "tasks.json",
+    "baselineSkill": "baseline-skill.md",
+    "baselineRaw": "baseline.raw.json",
+    "baselineScored": "baseline.scored.json",
+    "candidateRaw": "candidate.raw.json",
+    "candidateScored": "candidate.scored.json"
+  },
+  "generatedAt": "2026-09-05T23:14:39.730Z"
+}
