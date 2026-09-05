@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
           submodules: recursive
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "24"
           cache: "npm"
@@ -56,6 +56,13 @@ jobs:
           done
           echo "$PWD/.ci-bin" >> "$GITHUB_PATH"
 
+      # Fail fast on the release-blocking evidence gate before spending time on
+      # the full test matrix; base resolution mirrors scripts/release-preflight.sh.
+      - name: Verify changed Skill training evidence
+        run: |
+          training_base="$(git describe --tags --abbrev=0 --match 'v[0-9]*' HEAD^ 2>/dev/null || printf 'HEAD^')"
+          node scripts/aios.mjs skill verify-training --changed --base "$training_base" --json
+
       - name: Run root release tests
         run: |
           npm run test:scripts
@@ -78,11 +85,6 @@ jobs:
           npm --prefix packages/debug-hub run typecheck
           npm --prefix packages/debug-hub test
           npm --prefix packages/debug-hub run build
-
-      - name: Verify changed Skill training evidence
-        run: |
-          training_base="$(git describe --tags --abbrev=0 --match 'v[0-9]*' HEAD^ 2>/dev/null || printf 'HEAD^')"
-          node scripts/aios.mjs skill verify-training --changed --base "$training_base" --json
 
       - name: Materialize ignored local release outputs
         run: |

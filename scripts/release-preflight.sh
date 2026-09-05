@@ -131,6 +131,20 @@ if ! node "$ROOT_DIR/scripts/aios.mjs" skill verify-training --changed --base "$
   exit 1
 fi
 
+# v5.9.0 incident guard: the CI gate reads evidence from the TAGGED commit, not
+# from the working tree. Certification produced but not committed passes
+# verify-training locally and still fails the release. Require the evidence
+# path to be fully committed before a tag may be cut.
+EVIDENCE_DIR="docs/evidence/skill-training"
+if ! git -C "$ROOT_DIR" diff --quiet -- "$EVIDENCE_DIR"; then
+  echo "uncommitted training-evidence changes in $EVIDENCE_DIR; commit them before tagging" >&2
+  exit 1
+fi
+if [[ -n "$(git -C "$ROOT_DIR" status --porcelain -- "$EVIDENCE_DIR")" ]]; then
+  echo "untracked training evidence in $EVIDENCE_DIR; commit certification output before tagging" >&2
+  exit 1
+fi
+
 if [[ -f "$ROOT_DIR/agent-sources/manifest.json" ]]; then
   if ! git -C "$ROOT_DIR" diff --quiet -- scripts/lib/specs/orchestrator-agents.json; then
     echo "agent export drift detected; run: node scripts/generate-orchestrator-agents.mjs --export-only and commit scripts/lib/specs/orchestrator-agents.json" >&2
@@ -154,6 +168,8 @@ echo "  NATIVE:    generated native outputs match client-sources/native-base/"
 echo "  REX:       rex-harness planning kernel is materialized"
 echo "  TESTS:     root and MCP-server verification passed"
 echo "  TRAINING:  changed Skill evidence recomputed since $TRAINING_BASE"
+echo "  EVIDENCE:  training evidence committed (the tag will carry it)"
+echo "  TAG:       tag this exact commit with an annotated tag: git tag -a $TAG -m \"AIOS $TAG\" && git push origin $TAG"
 if [[ -f "$ROOT_DIR/agent-sources/manifest.json" ]]; then
   echo "  AGENTS:    export-only regeneration passed"
 fi
