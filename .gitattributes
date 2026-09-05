@@ -1,2 +1,12 @@
 # Keep canonical skill frontmatter LF-only for strict parser tests on Windows.
 skill-sources/**/SKILL.md text eol=lf
+
+# Drift guards compare generated specs against canonical sources byte-for-byte;
+# pin the working tree to LF on every platform so Windows checkouts do not
+# flunk guards that Linux CI passes.
+agent-sources/**/*.md text eol=lf
+agent-sources/**/*.json text eol=lf
+scripts/lib/specs/*.json text eol=lf
+/AGENTS.md text eol=lf
+/CLAUDE.md text eol=lf
+/GEMINI.md text eol=lf

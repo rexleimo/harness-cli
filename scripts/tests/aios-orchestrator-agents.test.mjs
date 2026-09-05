@@ -118,7 +118,10 @@ test('generateCompatibilityExport stays in sync with canonical markdown sources'
   const rendered = compat.renderCompatibilityExport(source);
   const actual = await fs.readFile(path.join(resolveRepoRoot(), 'scripts/lib/specs/orchestrator-agents.json'), 'utf8');
 
-  assert.equal(actual, rendered);
+  // The guard checks content drift, not platform line endings: autocrlf
+  // checkouts hold CRLF working-tree copies while the renderer emits LF.
+  const normalizeEol = (value) => value.replace(/\r\n/gu, '\n');
+  assert.equal(normalizeEol(actual), normalizeEol(rendered));
 });
 
 test('canonical agents support ECC-style native pack metadata and token/smoke roles', async () => {

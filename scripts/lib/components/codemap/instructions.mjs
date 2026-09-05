@@ -73,7 +73,11 @@ function injectCrgIntoInstructionFile(projectRoot, fileName, { dryRun = false, i
     const after = raw.slice(endIndex + AGENTS_MD_MARKERS.end.length);
     const newSection = `${AGENTS_MD_MARKERS.begin}\n${AGENTS_MD_CRG_SECTION}\n${AGENTS_MD_MARKERS.end}`;
     const nextRaw = `${before}${newSection}${after}`;
-    if (nextRaw === raw) {
+    // Compare with line endings normalized: autocrlf checkouts hold CRLF
+    // working-tree copies while the generated section is LF, and rewriting
+    // them purely for EOL churn would dirty every Windows checkout.
+    const stripCr = (value) => value.replace(/\r\n/gu, '\n');
+    if (stripCr(nextRaw) === stripCr(raw)) {
       io.log(`OK   codemap ${fileName} CRG section unchanged`);
       return;
     }
