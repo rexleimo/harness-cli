@@ -107,6 +107,29 @@ Recovery:
 - If retrieval returns empty unexpectedly, run `index:rebuild` once.
 - Source-of-truth remains `.aios/context-db/sessions/*`; sidecar is rebuildable cache.
 
+## Compression contract
+
+When a session grows past its budget, compress oldest-first under these rules.
+Compression reshapes what you carry forward; it never deletes session history —
+originals stay in `.aios/context-db/sessions/*` for the user and for audit.
+
+Tier per event range (you declare the tier, the harness only records it):
+
+- `FULL` — keep verbatim (recent rounds, open blockers, unconsumed handoffs).
+- `PARTIAL` — trim raw tool output, keep conclusions plus evidence refs.
+- `SUMMARY` — one conclusion line plus evidence refs per event cluster.
+- `EXCLUDED` — drop pure noise (heartbeats, duplicates, empty polls).
+
+Rules:
+
+- Protect the most recent 2 rounds: never compress them below `PARTIAL`.
+- Summarize, don't truncate: the summary stays agent-visible with evidence
+  refs so the next round can retrieve the original on demand.
+- Every compression writes an auditable event: which range, which tier, and
+  the resulting refs. Compressed content stays recallable through search.
+- State the remaining budget each round; cite it when you choose to compress.
+- A compression event that loses an evidence ref is malformed — re-emit it.
+
 ## Manual Report Export
 
 Use `context:pack` only for explicit inspection/debug export. Do not feed the report into a model prompt by default. Never paste a full ContextDB Report into a model prompt; if a model needs historical evidence, retrieve only the specific event, checkpoint, or ref the user chose.

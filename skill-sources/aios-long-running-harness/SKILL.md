@@ -26,6 +26,31 @@ Use this harness to keep long tasks stable under UI drift, model variability, an
 6. Recover: on failure, classify and retry only with a changed hypothesis.
 7. Complete: run final verification and write summary doc.
 
+## Progress self-report and replan cadence
+
+Stuckness is self-reported by you in structured observations, never judged by a
+second model call and never guessed from message keywords. After every
+Execute/Verify round, emit:
+
+- `progress_made: true|false` — `true` only when the round produced new
+  evidence, a new artifact, or a state change versus the previous round.
+  Repeating the same tool call with the same result is `false`.
+- `blocked_reason: <empty|one line>` — empty when progress was made; otherwise
+  the concrete blocker (selector gone, auth lost, tool error, waiting on input).
+
+Rules:
+
+- The harness counts consecutive `progress_made: false` rounds (threshold 3
+  unless the run preflight set another). At threshold, stop repeating: run
+  Recover with a changed hypothesis or escalate to the user. Never run the
+  identical action a fourth time hoping for a different result.
+- An identical tool call issued twice in a row is flagged immediately as
+  no-progress, regardless of the self-report.
+- Every N steps (`planning_interval`, default 5, set in preflight), re-emit
+  the frontier: ready work vs. blocked work with reason and evidence, and
+  replan the remaining steps from evidence. A replan is a checkpointed event,
+  not a silent course change.
+
 ## rex Command Boundary
 
 - The harness is an execution and recovery host, not a second software-workflow router. When a rex Workflow Activation exists, execute only the Provider selected by the current rex Command.

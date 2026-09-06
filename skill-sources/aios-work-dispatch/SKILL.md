@@ -88,6 +88,27 @@ Inspect preview for:
 - merge-gate and acceptance requirements;
 - blocked readiness or capability checks.
 
+### 1.5 Node recipe header
+
+Every work item carries a recipe header, declared at plan time and visible in
+the dry-run preview. A node without a header is not dispatchable:
+
+- `tools`: whitelist for this node (read-only vs edit/bash). Anything outside
+  the whitelist blocks the node.
+- `model` + `task-type`: explicit model tier and task-type declaration, per
+  the model-router skill. No declaration → default tier, never inferred.
+- `max_turns`: per-node turn cap; hitting it returns partial results, never a
+  silent retry loop.
+- `budget`: per-node quota plus overrun behavior (`downgrade` or `fail-fast`).
+- `output_schema`: the artifact plus evidence refs the node must return —
+  downstream triggers on this schema-validated artifact, not on prose handoff.
+- `retry`: per-node retry budget; each retry needs a changed hypothesis.
+- `subflow`: child blueprint reference when the node delegates, otherwise
+  none — no implicit spawning.
+
+Upstream output that fails its schema does not trigger downstream; it returns
+to its node as structured feedback within the retry budget.
+
 ### 2. Live approval boundary
 
 `aios work` is live by default and may start real model clients, consume money, and modify files. Preview does not authorize live execution. Before live dispatch, obtain explicit user approval for the planned task, client, concurrency, and expected external/model side effects.

@@ -54,8 +54,9 @@ The four required sections, in order:
 1. **FILES_REVIEWED** — list of files reviewed with line ranges and change status.
 2. **CHECKS** — typecheck, test suite, lint — each with a concrete PASS/FAIL status.
 3. **CODE** — the specific code snippet or issue reference, as a quoted block.
-4. **VALIDATION** — summary verdict: `APPROVED` or `REJECTED`, followed by specific
-   `next_actions` when rejected.
+4. **VALIDATION** — summary verdict: `APPROVED` or `REJECTED`, with `score`,
+   `complete`, and `missing[]`. When rejected, `missing` feeds the next round
+   directly, plus specific `next_actions`.
 
 ### Mandatory format
 
@@ -70,9 +71,13 @@ CHECKS:
 CODE:
   > // specific snippet or issue reference
 VALIDATION:
-  APPROVED — all checks pass
+  APPROVED — score: 1.0, complete: true, missing: []
   OR
-  REJECTED — [specific next_actions list]
+  REJECTED — score: <0-1>, complete: false,
+    missing:
+      - [specific gap feeding the next round]
+    next_actions:
+      - [specific, actionable step per gap]
 ```
 
 Rules:
@@ -82,8 +87,34 @@ Rules:
 - `CHECKS` MUST enumerate concrete commands with PASS/FAIL, not "looks fine".
 - `CODE` MUST quote the exact snippet under review or the exact issue — never a
   paraphrase.
-- `VALIDATION` MUST start with `APPROVED` or `REJECTED`. If `REJECTED`, it MUST
-  list specific, actionable next steps.
+- `VALIDATION` MUST start with `APPROVED` or `REJECTED` and MUST carry `score`,
+  `complete`, and `missing`. If `REJECTED`, `missing` MUST list each gap and
+  `next_actions` MUST give one actionable step per gap.
+
+### Retry budget and feedback loop
+
+- Each verdict round declares `retry_budget: <N> remaining: <M>` alongside the
+  verdict (default budget 3, agreed with the task owner when lower).
+- A REJECTED verdict returns `valid: false + feedback (the missing[] list) +
+  remaining budget`; the next round addresses exactly that feedback, nothing else.
+- Budget exhausted → stop reworking, report REJECTED with the remaining
+  `missing[]` as the handoff. Never silently restart the budget.
+- You self-report budget use; the harness only records what you declared.
+
+### Requery on parse failure
+
+When your verdict fails to parse (missing header, empty section), do not
+assert "done" and do not restart the whole task. Issue one structured requery
+to yourself, up to the retry budget:
+
+```
+REQUERY (attempt <k>/<N>):
+  parse_error: <which header missing or empty>
+  fix: <re-emit full verdict with all four sections non-empty>
+```
+
+Then re-emit the complete verdict block. A parse failure is a format fix,
+never a content waiver — all four sections stay mandatory.
 
 ### Verdict validator
 
