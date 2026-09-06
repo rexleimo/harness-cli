@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
+## [5.11.0] - 2026-09-06
+
+### Added
+
+- skills: memo extraction contract (`skill-sources/memo/SKILL.md`) — persistable entries carry five declared elements (`fact`, `entities[]`, absolute ISO `date`, `evidence_ref`, `confidence`), plus exclusion rules (no greetings/half-baked/un evidenced claims) and precise-replacement editing discipline via `--supersedes`.
+- skills: verification verdict judge loop (`skill-sources/verification-loop/SKILL.md`) — `VALIDATION` now carries `score`/`complete`/`missing[]` feeding the next round, a declared retry budget (default 3, exhaust = stop and hand off), and a structured self-requery template for parse failures.
+- skills: harness progress self-report (`skill-sources/aios-long-running-harness/SKILL.md`) — every Execute/Verify round declares `progress_made` + `blocked_reason`; three consecutive no-progress rounds force Recover-with-changed-hypothesis or escalation, and `planning_interval` (default 5) re-emits the frontier as a checkpointed replan.
+- skills: ContextDB compression tiers (`skill-sources/contextdb-autopilot/SKILL.md`) — `FULL`/`PARTIAL`/`SUMMARY`/`EXCLUDED` per event range declared by the model, newest 2 rounds never below `PARTIAL`, summaries stay agent-visible with evidence refs, and every compression writes an auditable event.
+- skills: weak-model pinning + budget declaration (`skill-sources/model-router/SKILL.md`) — bypass chores (summaries, titles, memory extraction, routine docs/reviews) pinned to cheap models with downgrade-only fallback; every dispatch declares `budget`/`quota_scope`/`downgrade|fail-fast`.
+- skills: dispatch node recipe headers (`skill-sources/aios-work-dispatch/SKILL.md`) — each parallel work item declares `tools` whitelist, `model` + `task-type`, `max_turns`, `budget`, `output_schema`, `retry`, and `subflow`; downstream triggers on schema-validated artifacts, never prose handoffs.
+- rex-harness: planning progress ledger (`skill-sources/rex-planning/SKILL.md`) — per-round `{is_complete, in_progress[], facts[], assignment}` with empty-facts honesty rule, plus partial-results-with-resume-handle on over-limit/failing nodes and no-overlap/no-invented-deps discipline for `parallelGroups`.
+
+### Changed
+
+- docs: release mirrors updated (`docs/zh-CN/CHANGELOG.md`, `docs-site/changelog.md` + `docs-site/zh/changelog.md`) and release blog posted (`blog-site/2026-09-v511-prompt-contracts.md` + zh/ja/ko editions).
+- repo: `rex-harness` pointer advanced to `1401a72` (planning ledger + `projection-history.json` LF pin so future digest appends never rewrite the whole file).
+
+### Notes
+
+- Prompt-only release: no runtime behavior changes, no breaking changes; all suites green with no code modifications.
+- Refresh local projections after pulling (`aios setup`/`aios update` re-runs the rex client projection installer for `rex-planning`).
+
 ## [5.10.0] - 2026-09-06
 
 ### Added

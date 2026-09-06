@@ -7,6 +7,23 @@ description: Release history, upgrade notes, and links to detailed docs updates.
 
 Use this page to track what changed in `AIOS` and jump to release-related docs updates.
 
+## v5.11.0 (2026-09-06) — Prompt Contracts Hardened: Judge Loops, Self-Reported Progress, Compression Tiers, Pinned Weak Models
+
+### What changed
+
+- **Memo extraction contract**: persistable entries carry five declared elements (`fact`, `entities[]`, absolute ISO `date`, `evidence_ref`, `confidence`); greetings, half-baked plans, and unevidenced claims are excluded; corrections use precise replacement via `--supersedes`.
+- **Verification judge loop**: `VALIDATION` carries `score`/`complete`/`missing[]` feeding the next round, a declared retry budget (default 3 — exhaust means stop and hand off), and a structured self-requery template for parse failures.
+- **Harness stuck self-report**: every Execute/Verify round declares `progress_made` + `blocked_reason`; three consecutive no-progress rounds force Recover-with-changed-hypothesis or escalation; `planning_interval` (default 5) re-emits the frontier as a checkpointed replan.
+- **Compression tiers**: `FULL`/`PARTIAL`/`SUMMARY`/`EXCLUDED` per event range, newest 2 rounds never below `PARTIAL`, summaries stay agent-visible with evidence refs, every compression writes an auditable event.
+- **Weak-model pinning + budgets**: bypass chores pinned to cheap models (downgrade-only fallback); every dispatch declares `budget`/`quota_scope`/`downgrade|fail-fast`.
+- **Dispatch node recipes**: each parallel work item declares `tools`, `model` + `task-type`, `max_turns`, `budget`, `output_schema`, `retry`, `subflow`; downstream triggers on schema-validated artifacts.
+- **rex-planning ledger** (submodule): per-round `{is_complete, in_progress[], facts[], assignment}`, partial-results-with-resume-handle, no-overlap/no-invented-deps; `projection-history.json` pinned to LF.
+
+### Upgrade notes
+
+- No breaking behavior changes — prompt-only release, no runtime modifications.
+- After pulling, re-run `aios setup`/`aios update` to refresh the `rex-planning` client projection.
+
 ## v5.10.0 (2026-09-06) — Release Trust & Repo Slimming: Windows-Green Regression, Hardened Release Gates, Supply-Chain Pins
 
 ### What changed

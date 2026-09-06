@@ -4,9 +4,25 @@
 
 格式基于 Keep a Changelog，遵循语义化版本规范。
 
-> 当前主线版本：**v5.10.0（2026-09-06）**。完整的多语言当前日志请查看 [`docs-site/zh/changelog.md`](../../docs-site/zh/changelog.md)。
+> 当前主线版本：**v5.11.0（2026-09-06）**。完整的多语言当前日志请查看 [`docs-site/zh/changelog.md`](../../docs-site/zh/changelog.md)。
 >
-> v5.10.0 重点包含：Windows 回归套件全绿（两个固有红测实为 CRLF 伪影，drift guard 归一化 + `.gitattributes` 钉 LF）、发布证据门时序修复与 preflight"证据必须已提交"守卫、供应链加固（Actions 全量 SHA 钉死、gitleaks、npm audit critical 门、windows 冒烟 npm ci）、仓库减负（461 个可再生成文件出库）、叙事对齐（AGENTS/mkdocs/README）与提示词撰写规范落地（主仓 + rex-harness）。
+> v5.11.0 重点包含：7 组提示词契约加固（memo 五要素抽取、verification 评分回环、harness 卡死自报、ContextDB 压缩分级、弱模型钉死 + 预算声明、dispatch 节点 recipe、rex-planning progress ledger），纯提示词、无运行时改动、无破坏性变更。
+
+## [5.11.0] - 2026-09-06
+
+### 新增
+
+- 记忆抽取契约：可落库条目五要素（`fact` / `entities[]` / 绝对日期 / `evidence_ref` / `confidence`）+ 排除规则 + 精确替换编辑纪律。
+- 验证评分回环：`VALIDATION` 带 `score` / `complete` / `missing[]` 直灌下一轮，重试预算默认 3，解析失败结构化自重问。
+- 长任务卡死自报：每轮 `progress_made` + `blocked_reason`，连续 3 轮无进展强制换路或上报，`planning_interval` 默认 5 重出 frontier。
+- 上下文压缩分级：`FULL` / `PARTIAL` / `SUMMARY` / `EXCLUDED` 四档，护最近 2 轮，摘要可回取原文，压缩写审计事件。
+- 弱模型钉死 + 预算声明：旁路杂务钉死低成本模型（只降不升），调度声明 `budget` / `quota_scope` / 超支行为。
+- 并行节点 recipe 头：`tools` 白名单、`model` + `task-type`、`max_turns`、`budget`、`output_schema`、`retry`、`subflow`，下游按 schema 产物触发。
+- rex-planning ledger：每轮 `{is_complete, in_progress[], facts[], assignment}`，空 facts 如实上报，失败节点 partial 结果 + 续跑句柄。
+
+### 说明
+
+- 纯提示词发布：无运行时行为变更，拉取后重跑 `aios setup` / `aios update` 刷新 `rex-planning` 投影即可。
 
 ## [5.10.0] - 2026-09-06
 

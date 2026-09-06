@@ -5,6 +5,23 @@ description: 版本历史、升级说明与文档变更入口。
 
 # 更新日志
 
+## v5.11.0（2026-09-06）——提示词契约加固：评分回环、卡死自报、压缩分级、弱模型钉死
+
+### 主要变更
+
+- **记忆抽取契约**：可落库条目五要素（`fact` / `entities[]` / 绝对日期 / `evidence_ref` / `confidence`），寒暄、半成品、无证据断言不入库，修正走精确替换。
+- **验证评分回环**：`VALIDATION` 带 `score` / `complete` / `missing[]` 直灌下一轮，重试预算默认 3（耗尽即停手交接），解析失败结构化自重问。
+- **长任务卡死自报**：每轮 `progress_made` + `blocked_reason`，连续 3 轮无进展强制换路或上报，`planning_interval` 默认 5 重出 frontier。
+- **压缩分级**：`FULL` / `PARTIAL` / `SUMMARY` / `EXCLUDED` 四档，护最近 2 轮，摘要带证据可回取，压缩写审计事件。
+- **弱模型钉死 + 预算**：旁路杂务钉死低成本模型（只降不升），调度声明 `budget` / `quota_scope` / 超支行为。
+- **节点 recipe**：并行节点声明 tools 白名单、模型档位、`max_turns`、`budget`、`output_schema`、`retry`、`subflow`，下游按 schema 产物触发。
+- **rex-planning ledger**（子模块）：每轮结构化 ledger + partial 续跑 + 无重叠依赖纪律，`projection-history.json` 钉 LF。
+
+### 升级说明
+
+- 无破坏性变更——纯提示词发布，零运行时改动。
+- 拉取后重跑 `aios setup` / `aios update` 刷新 `rex-planning` 投影。
+
 ## v5.10.0（2026-09-06）——发布可信与仓库减负：回归全绿、发布门禁加固、供应链钉死
 
 ### 主要变更
