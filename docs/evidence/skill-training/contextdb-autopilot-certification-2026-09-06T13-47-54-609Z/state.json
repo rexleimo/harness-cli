@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 2,
+  "kind": "aios.skill-training-certification.v2",
+  "skillId": "contextdb-autopilot",
+  "sourcePath": "skill-sources/contextdb-autopilot/SKILL.md",
+  "base": "v5.10.0",
+  "status": "accepted",
+  "nonRegression": true,
+  "acceptedSkillHash": "5a999699925a40243a866c64ee2899793dd71c682f684c1b887498e264f8d933",
+  "baseline": {
+    "kind": "git",
+    "contentSha256": "b8b5f0abf46d5fc657c34c7391c2fd2e0b41b87d610c871b90ab162c2fba2c66"
+  },
+  "candidate": {
+    "contentSha256": "5a999699925a40243a866c64ee2899793dd71c682f684c1b887498e264f8d933"
+  },
+  "metrics": {
+    "baseline": {
+      "taskCount": 3,
+      "trainTaskCount": 2,
+      "validationTaskCount": 1,
+      "trainHard": 1,
+      "validationHard": 1,
+      "overallHard": 1
+    },
+    "candidate": {
+      "taskCount": 3,
+      "trainTaskCount": 2,
+      "validationTaskCount": 1,
+      "trainHard": 1,
+      "validationHard": 1,
+      "overallHard": 1
+    }
+  },
+  "artifacts": {
+    "tasks": "tasks.json",
+    "baselineSkill": "baseline-skill.md",
+    "baselineRaw": "baseline.raw.json",
+    "baselineScored": "baseline.scored.json",
+    "candidateRaw": "candidate.raw.json",
+    "candidateScored": "candidate.scored.json"
+  },
+  "generatedAt": "2026-09-06T13:47:54.609Z"
+}
