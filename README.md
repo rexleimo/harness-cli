@@ -2,21 +2,22 @@
 
 [![Release](https://img.shields.io/github/v/release/rexleimo/aios?display_name=tag&sort=semver)](https://github.com/rexleimo/aios/releases)
 [![Docs](https://img.shields.io/badge/docs-cli.rexai.top-0ea5e9)](https://cli.rexai.top)
+[![Local-first](https://img.shields.io/badge/local--first-agent_control_plane-7c3aed)](https://cli.rexai.top/architecture/)
 [![License](https://img.shields.io/github/license/rexleimo/aios)](https://github.com/rexleimo/aios)
 [![Node](https://img.shields.io/badge/node-24%20LTS-339933)](https://nodejs.org)
 
-> **One sentence. Any complex task. Done.**
-> AIOS makes your AI coding agent actually finish the job — memory, verification, and multi-agent collaboration, all from a single instruction. Works with `codex`, `claude`, `gemini`, `opencode`, `hermes`, and `grok`.
+> **The local-first control plane for long-horizon coding agents.**
+> AIOS gives your AI coding agent what it's missing — cross-session project memory, multi-agent teams, resumable overnight runs, and verifiable evidence for every change. **One sentence. Any complex task. Done.**
 
-[Docs](https://cli.rexai.top) · [Quick Start](https://cli.rexai.top/getting-started/) · [Blog](https://cli.rexai.top/blog/) · [中文](README-zh.md)
+**It runs on top of the agent you already use** — Codex CLI, Claude Code, Gemini CLI, OpenCode, Hermes, and Grok. AIOS is not another agent framework: your agent stays exactly as it is, and AIOS adds the memory, coordination, and verification layer around it. Everything runs locally.
+
+[Why AIOS](#why-aios) · [Install](#install-in-30-seconds) · [Proof](#proof-not-promises) · [Docs](https://cli.rexai.top) · [Blog](https://cli.rexai.top/blog/) · [中文](README-zh.md)
 
 ![AIOS architecture overview](docs-site/assets/visual-architecture-overview.svg)
 
 ## Why AIOS
 
-**One sentence. Any complex task. Done.** That's the promise.
-
-Your AI coding agent (Codex, Claude Code, Gemini CLI, OpenCode, Hermes, Grok) is smart — but it forgets everything between sessions, can't coordinate complex multi-step work, and has no way to verify its own output. AIOS fixes all of that:
+Your AI coding agent is smart — but it forgets everything between sessions, can't coordinate multi-step work on its own, and has no way to verify its own output. Long-horizon work (big refactors, release handoffs, overnight runs) falls apart exactly where the single-session agent ends. AIOS fixes that:
 
 | You say | AIOS does |
 | —- | --- |
@@ -25,9 +26,9 @@ Your AI coding agent (Codex, Claude Code, Gemini CLI, OpenCode, Hermes, Grok) is
 | "Finish the release handoff overnight" | Runs the full objective with checkpoints, resumes if interrupted, delivers verified results |
 | "Fix the login bug" | Recalls relevant context, routes to the simplest fix path, checks the fix before showing you |
 
-**Your data stays local.** Everything — memory, logs, verification — runs on your machine. Nothing leaves.
+**Your data stays local.** Everything — memory, logs, verification evidence — runs on your machine. Nothing leaves.
 
-**You don't change how you work.** Keep using the coding client you already have. AIOS adds what it's missing.
+**You don't change how you work.** Keep using the coding client you already have. AIOS adds the control plane it's missing.
 
 ## Install in 30 seconds
 
@@ -57,6 +58,23 @@ Unattended install:
 ```bash
 node scripts/aios.mjs init --all --yes-compression-tools --yes-headroom-mcp
 ```
+
+**You're ready when:**
+
+- `aios doctor --native --verbose` reports your client detected and synced
+- `.aios/context-db/index.json` exists in your project root
+- `aios memo search "anything"` answers without an error
+
+## Proof, not promises
+
+Agent claims are cheap, so AIOS is built so you never have to trust one:
+
+- **Every run leaves evidence.** Harness runs produce evidence envelopes — commands, exit codes, hashes, test output — written under `.aios/`, not spoken assurances. See [Solo Harness](https://cli.rexai.top/solo-harness/).
+- **The project verifies itself.** Every release passes the script test suite plus strict `typecheck && test && build` gates, and the [changelog](https://cli.rexai.top/changelog/) records what changed and why.
+- **Your install is inspectable.** `aios doctor --native --verbose` reports exactly what was detected, synced, or skipped. No silent side effects.
+- **Memory is inspectable.** ContextDB is pull-based and local: search what the agent remembers with `aios memo search`, and nothing leaves your machine.
+
+AIOS is maintained in the open by [Rex](https://rexai.top) — see the release history for a steady cadence of shipped, verified changes.
 
 ## How it fits together
 
@@ -112,7 +130,7 @@ The project marker points clients at `.aios/context-db/index.json`. ContextDB is
 
 ## Supported clients
 
-Native or compatibility integrations for:
+Native or compatibility integrations for six coding clients — same project memory, same workflow policy, same verification evidence everywhere:
 
 `codex` · `claude` · `gemini` · `opencode` · `hermes` · `grok` (Grok Build)
 
@@ -123,6 +141,9 @@ Feature depth varies by client. Run `aios doctor --native --verbose` instead of 
 | Intent | Start here |
 | --- | --- |
 | Install and verify | [Quick Start](https://cli.rexai.top/getting-started/) |
+| Why agents forget context | [Why Agents Forget Context](https://cli.rexai.top/why-agents-forget-context/) |
+| Overnight / resumable runs | [Overnight Agent Runs](https://cli.rexai.top/overnight-agent-runs/) |
+| Pick between coding agents | [Claude Code vs Codex vs Gemini](https://cli.rexai.top/claude-code-vs-codex-vs-gemini/) |
 | Windows recovery | [Windows Guide](https://cli.rexai.top/windows-guide/) |
 | Choose the right route | [Workflow Policy](https://cli.rexai.top/workflow-policy/) |
 | Project memory | [ContextDB](https://cli.rexai.top/contextdb/) |
@@ -132,6 +153,19 @@ Feature depth varies by client. Run `aios doctor --native --verbose` instead of 
 | Commands by intent | [Use Cases](https://cli.rexai.top/use-cases/) |
 | Runtime layers | [Architecture](https://cli.rexai.top/architecture/) |
 | Releases & tutorials | [Blog](https://cli.rexai.top/blog/) |
+
+## Author & ecosystem
+
+AIOS is built and maintained by [Rex](https://rexai.top) ([@rexleimo](https://github.com/rexleimo)), who writes about AI agents, Rust, and systems engineering on the [RexAI Content Hub](https://rexai.top) (梦兽编程, in Chinese).
+
+| Site | What's there |
+| --- | --- |
+| [cli.rexai.top](https://cli.rexai.top) | AIOS documentation, guides, and blog |
+| [rexai.top](https://rexai.top) | Author's blog — AI agents, Rust, and systems (中文) |
+| [os.rexai.top](https://os.rexai.top) | RexOS — companion Agent OS project |
+| [tool.rexai.top](https://tool.rexai.top) | Free developer tools |
+
+Questions or feedback? [Open an issue](https://github.com/rexleimo/aios/issues). If AIOS saves you an overnight run, a ⭐ star helps other builders find it.
 
 ## Requirements
 
